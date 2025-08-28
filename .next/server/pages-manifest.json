@@ -1,0 +1,13 @@
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/": "pages/index.js",
+  "/login": "pages/login.js",
+  "/api/queries": "pages/api/queries.js",
+  "/api/queries/[id]": "pages/api/queries/[id].js",
+  "/api/queries/pending": "pages/api/queries/pending.js",
+  "/api/queries/resolved": "pages/api/queries/resolved.js",
+  "/api/auth/me": "pages/api/auth/me.js",
+  "/api/auth/logout": "pages/api/auth/logout.js"
+}
