@@ -1,416 +1,537 @@
-# 🔧 TechFix Pro - Laptop Repair Management System
+# 🛠️ TechFix Pro - Next-Gen Laptop Repair Management System
 
-A comprehensive Next.js-based laptop repair management system with secure authentication, real-time tracking, and modern UI/UX design. This system provides a complete workflow for managing laptop repair requests from submission to resolution with multi-user authentication support.
+![Next.js](https://img.shields.io/badge/Next.js-14.2.5-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
+![MongoDB](https://img.shields.io/badge/MongoDB-6.8.0-green)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4.1-cyan)
+![React](https://img.shields.io/badge/React-18-blue)
 
-## 🚀 Key Features
+A comprehensive, professional laptop repair management system built with Next.js, TypeScript, MongoDB, and Tailwind CSS. This system provides complete tracking and management of laptop repair requests with authentication, status management, and resolution tracking.
 
-- **🔐 Secure Authentication System** - JWT-based login with bcrypt password hashing
-- **📝 Repair Query Management** - Add, track, and resolve laptop repair requests  
-- **💰 Cost Management** - Handle repair costs in Indian Rupees (₹)
-- **🎨 Modern UI/UX** - Responsive design with Tailwind CSS and glassmorphism effects
-- **⚡ Real-time Updates** - Dynamic status changes and instant feedback
-- **🗑️ Data Management** - Delete resolved queries with confirmation dialogs
-- **👥 Multi-user Support** - Support for multiple technician accounts
-- **📱 Mobile Responsive** - Works seamlessly on all devices
+## 📋 Table of Contents
 
-## 🏗️ Complete Project Structure
+- [Features](#-features)
+- [Project Structure](#-project-structure)
+- [Tech Stack](#-tech-stack)
+- [System Architecture](#-system-architecture)
+- [Project Modules](#-project-modules)
+- [Component Structure](#-component-structure)
+- [API Endpoints](#-api-endpoints)
+- [Workflow Chart](#-workflow-chart)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Environment Variables](#-environment-variables)
+- [Scripts](#-scripts)
+- [Contributing](#-contributing)
+
+## ✨ Features
+
+- **🔐 Secure Authentication System**: JWT-based authentication with protected routes
+- **📝 Query Management**: Submit, track, and manage laptop repair requests
+- **📊 Status Tracking**: Real-time status updates (Pending, Resolved, Not Resolved)
+- **🎯 Priority System**: Assign priorities (Low, Medium, High, Urgent)
+- **💰 Cost Management**: Track estimated and actual repair costs
+- **🔍 Advanced Filtering**: Filter queries by status, priority, and other criteria
+- **📱 Responsive Design**: Mobile-first design with Tailwind CSS
+- **🚀 Real-time Updates**: Dynamic updates without page refresh
+- **🛡️ Data Validation**: Comprehensive server-side and client-side validation
+- **📈 Dashboard Analytics**: Overview of repair statistics and metrics
+
+## 🏗️ Project Structure
 
 ```
-laptop-database/
-├── 📁 components/                 # Reusable React Components
-│   ├── AddLaptopQuery.tsx        # ✅ Form component for adding new repair queries
-│   ├── Layout.tsx                # ✅ Main layout with header, user welcome, logout
-│   ├── ListSection.tsx           # ✅ Display and manage pending repair queries  
-│   ├── Navigation.tsx            # ✅ Tab navigation between sections
-│   ├── ProtectedRoute.tsx        # ✅ Route protection and authentication guard
-│   └── ResolvedSection.tsx       # ✅ Display and manage completed repairs
-│
-├── 📁 contexts/                   # React Context Providers
-│   └── AuthContext.tsx           # ✅ Authentication state management and user context
-│
-├── 📁 lib/                       # Utility Libraries
-│   └── mongoose.ts               # ✅ MongoDB connection configuration
-│
-├── 📁 models/                     # Database Models
-│   ├── LaptopQuery.ts            # ✅ Mongoose schema for repair queries
-│   └── User.ts                   # ✅ User model with password hashing
-│
-├── 📁 pages/                      # Next.js Pages and API Routes
-│   ├── 📁 api/                   # Backend API Endpoints
-│   │   ├── 📁 auth/              # Authentication APIs
-│   │   │   ├── backup-login.ts   # 🔄 Backup authentication endpoint
-│   │   │   ├── complete-reset.ts # ✅ Complete user database reset (Working)
-│   │   │   ├── force-reset-users.ts # 🔄 Force user reset with validation
-│   │   │   ├── init-users.ts     # 🔄 Initialize default users
-│   │   │   ├── login.ts          # 🚫 Main login API (Has Issues)
-│   │   │   ├── logout.ts         # ✅ User logout and session clearing (Working)
-│   │   │   ├── me.ts             # ✅ Get current user information (Working)
-│   │   │   ├── reset-users.ts    # 🔄 Reset user credentials
-│   │   │   └── simple-login.ts   # ✅ Simplified login endpoint (Working & Used)
-│   │   ├── 📁 debug/             # Debug and Development APIs
-│   │   │   └── detailed-users.ts # ✅ Detailed user inspection for debugging
-│   │   └── 📁 queries/           # Repair Query Management APIs
-│   │       ├── delete.ts         # ✅ Delete resolved queries (Working)
-│   │       ├── index.ts          # ✅ Get all queries with filtering (Working)
-│   │       ├── resolve.ts        # ✅ Mark queries as resolved (Working)
-│   │       └── submit.ts         # ✅ Submit new repair queries (Working)
-│   ├── _app.tsx                  # ✅ Next.js App component with AuthProvider
-│   ├── _error.tsx                # ✅ Error page component
-│   ├── index.tsx                 # ✅ Main dashboard page (Working)
-│   └── login.tsx                 # ✅ Modern login page with password toggle (Working)
-│
-├── 📁 scripts/                   # Utility Scripts
-│   └── mongodb-status.js         # ✅ MongoDB connection and user verification script
-│
-├── 📁 styles/                    # Styling
-│   └── globals.css               # ✅ Global CSS with Tailwind and custom animations
-│
-├── .env.local                    # ⚙️ Environment variables (MongoDB URI, JWT Secret)
-├── .gitignore                    # 📄 Git ignore configuration
-├── next.config.js                # ⚙️ Next.js configuration
-├── package.json                  # 📦 Dependencies and scripts
-├── tailwind.config.js            # 🎨 Tailwind CSS configuration
-└── tsconfig.json                 # 📄 TypeScript configuration
+laptop-repair-management/
+├── 📁 components/          # Reusable React components
+│   ├── AddLaptopQuery.tsx  # Form for submitting new repair requests
+│   ├── Layout.tsx          # Main layout wrapper
+│   ├── ListSection.tsx     # Display pending queries
+│   ├── Navigation.tsx      # Navigation component
+│   ├── ProtectedRoute.tsx  # Route protection wrapper
+│   └── ResolvedSection.tsx # Display resolved queries
+├── 📁 contexts/            # React context providers
+│   └── AuthContext.tsx     # Authentication context
+├── 📁 lib/                 # Utility libraries
+│   └── mongoose.ts         # MongoDB connection
+├── 📁 models/              # Database models
+│   ├── LaptopQuery.ts      # Laptop query schema
+│   └── User.ts             # User authentication schema
+├── 📁 pages/               # Next.js pages
+│   ├── 📁 api/             # API routes
+│   │   ├── 📁 auth/        # Authentication endpoints
+│   │   │   ├── backup-login.ts
+│   │   │   ├── complete-reset.ts
+│   │   │   ├── force-reset-users.ts
+│   │   │   ├── init-users.ts
+│   │   │   ├── login.ts
+│   │   │   ├── logout.ts
+│   │   │   ├── me.ts
+│   │   │   ├── reset-users.ts
+│   │   │   └── simple-login.ts
+│   │   ├── 📁 debug/       # Debug endpoints
+│   │   │   ├── db-status.ts
+│   │   │   ├── detailed-users.ts
+│   │   │   ├── env-check.ts
+│   │   │   └── test-login.ts
+│   │   └── 📁 queries/     # Query management endpoints
+│   │       ├── [id].ts     # Individual query operations
+│   │       ├── index.ts    # Main query operations
+│   │       ├── pending.ts  # Pending queries
+│   │       └── resolved.ts # Resolved queries
+│   ├── _app.tsx            # App wrapper with providers
+│   ├── _error.tsx          # Error page
+│   ├── index.tsx           # Home page
+│   └── login.tsx           # Login page
+├── 📁 scripts/             # Utility scripts
+│   ├── check-mongodb-users.js
+│   ├── complete-fix.js
+│   ├── final-setup.js
+│   ├── fix-credentials.js
+│   ├── init-users.js
+│   ├── mongodb-status.js
+│   ├── quick-test.js
+│   ├── reset-users.js
+│   ├── setup-auth.js
+│   ├── test-credentials.js
+│   └── test-db.js
+├── 📁 styles/              # Global styles
+│   └── globals.css         # Tailwind CSS and global styles
+├── next.config.js          # Next.js configuration
+├── package.json            # Dependencies and scripts
+├── postcss.config.js       # PostCSS configuration
+├── tailwind.config.js      # Tailwind CSS configuration
+├── tsconfig.json           # TypeScript configuration
+└── README.md               # Project documentation
 ```
 
+## 🛠️ Tech Stack
 
-## 🔄 Complete System Workflow
+### Frontend
+- **Next.js 14.2.5**: React framework with SSR and API routes
+- **React 18**: Frontend library
+- **TypeScript 5**: Type-safe JavaScript
+- **Tailwind CSS 3.4.1**: Utility-first CSS framework
+
+### Backend
+- **Node.js**: Runtime environment
+- **Next.js API Routes**: Server-side API endpoints
+- **MongoDB 6.8.0**: NoSQL database
+- **Mongoose 8.5.2**: MongoDB object modeling
+
+### Authentication & Security
+- **JSON Web Tokens (JWT) 9.0.2**: Secure authentication
+- **bcryptjs 3.0.2**: Password hashing
+- **Protected Routes**: Client-side route protection
+
+### Development Tools
+- **ESLint**: Code linting
+- **PostCSS**: CSS processing
+- **Autoprefixer**: CSS vendor prefixes
+
+## 🏛️ System Architecture
+
+The system follows a modern full-stack architecture:
+
+1. **Frontend Layer**: React components with TypeScript
+2. **API Layer**: Next.js API routes handling business logic
+3. **Database Layer**: MongoDB with Mongoose ODM
+4. **Authentication Layer**: JWT-based secure authentication
+5. **State Management**: React Context for global state
+
+## 📦 Project Modules
+
+### 1. Authentication Module (`contexts/AuthContext.tsx`)
+- **Purpose**: Manages user authentication state
+- **Features**:
+  - JWT token management
+  - User session persistence
+  - Login/logout functionality
+  - Protected route handling
+  - Auto-redirect on authentication failure
+
+### 2. User Management Module (`models/User.ts`)
+- **Purpose**: User data model and authentication
+- **Features**:
+  - User schema definition
+  - Password hashing with bcrypt
+  - Password comparison methods
+  - Username uniqueness validation
+
+### 3. Query Management Module (`models/LaptopQuery.ts`)
+- **Purpose**: Laptop repair request data model
+- **Features**:
+  - Comprehensive query schema
+  - Status tracking (pending, resolved, not_resolved)
+  - Priority levels (low, medium, high, urgent)
+  - Cost management (estimated vs actual)
+  - Timestamp tracking
+
+### 4. API Layer
+#### Authentication APIs (`pages/api/auth/`)
+- `login.ts`: User authentication endpoint
+- `logout.ts`: User logout endpoint
+- `me.ts`: Current user information
+- `init-users.ts`: Initialize default users
+- `reset-users.ts`: Reset user database
+
+#### Query APIs (`pages/api/queries/`)
+- `index.ts`: Main CRUD operations for queries
+- `[id].ts`: Individual query operations
+- `pending.ts`: Fetch pending queries
+- `resolved.ts`: Fetch resolved queries
+
+#### Debug APIs (`pages/api/debug/`)
+- `db-status.ts`: Database connection status
+- `env-check.ts`: Environment variable validation
+- `test-login.ts`: Authentication testing
+
+### 5. UI Components Module
+
+#### Core Components (`components/`)
+- **Layout.tsx**: Main application layout wrapper
+- **Navigation.tsx**: Navigation bar with user actions
+- **ProtectedRoute.tsx**: Route protection wrapper
+
+#### Feature Components
+- **AddLaptopQuery.tsx**: New repair request form
+- **ListSection.tsx**: Pending queries display
+- **ResolvedSection.tsx**: Resolved queries display
+
+### 6. Database Module (`lib/mongoose.ts`)
+- **Purpose**: MongoDB connection management
+- **Features**:
+  - Connection pooling
+  - Error handling
+  - Environment-based configuration
+
+### 7. Utility Scripts (`scripts/`)
+- Database initialization and maintenance scripts
+- User management utilities
+- Connection testing tools
+
+## 🧩 Component Structure
+
+### AddLaptopQuery Component
+```tsx
+interface AddLaptopQueryProps {
+  onQueryAdded: () => void
+}
+```
+- **Purpose**: Form for submitting new repair requests
+- **Features**: Real-time validation, success/error messaging, responsive design
+
+### ListSection Component
+```tsx
+interface ListSectionProps {
+  onQueryUpdated: () => void
+}
+```
+- **Purpose**: Display and manage pending queries
+- **Features**: Status updates, priority filtering, cost tracking
+
+### ResolvedSection Component
+- **Purpose**: Display completed repair requests
+- **Features**: Resolution details, cost analysis, completion statistics
+
+### Navigation Component
+- **Purpose**: Main navigation and user management
+- **Features**: User profile, logout functionality, responsive menu
+
+## 🔌 API Endpoints
+
+### Authentication Endpoints
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/login` | User authentication |
+| POST | `/api/auth/logout` | User logout |
+| GET | `/api/auth/me` | Get current user |
+| POST | `/api/auth/init-users` | Initialize users |
+
+### Query Management Endpoints
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/queries` | Get all queries |
+| POST | `/api/queries` | Create new query |
+| GET | `/api/queries/[id]` | Get specific query |
+| PUT | `/api/queries/[id]` | Update query |
+| DELETE | `/api/queries/[id]` | Delete query |
+| GET | `/api/queries/pending` | Get pending queries |
+| GET | `/api/queries/resolved` | Get resolved queries |
+
+### Debug Endpoints
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/debug/db-status` | Database status |
+| GET | `/api/debug/env-check` | Environment check |
+| POST | `/api/debug/test-login` | Test authentication |
+
+## 📊 Workflow Chart
 
 ```mermaid
 graph TD
-    A[🌐 User Visits Application] --> B{🔐 Authentication Check}
+    A[🚀 Application Start] --> B{👤 User Authenticated?}
     
-    B -->|❌ Not Authenticated| C[📱 Redirect to Login Page]
-    B -->|✅ Authenticated| D[🏠 Dashboard Access]
+    B -->|No| C[🔐 Login Page]
+    B -->|Yes| D[🏠 Dashboard]
     
-    C --> E[📝 User Enters Credentials]
-    E --> F[🚀 Submit Login Form]
-    F --> G[🔗 API: /api/auth/simple-login]
-    G --> H{✅ Valid Credentials?}
-    H -->|❌ Invalid| I[💥 Show Error Message]
-    H -->|✅ Valid| J[🎫 Generate JWT Token]
-    I --> E
-    J --> K[🍪 Set HTTP-Only Cookie]
-    K --> L[📊 Update Auth Context]
-    L --> M[🎯 Show User Welcome: "Welcome, Nitish Kumar"]
-    M --> D
+    C --> E[📝 Enter Credentials]
+    E --> F{✅ Valid Credentials?}
+    F -->|No| G[❌ Show Error]
+    G --> E
+    F -->|Yes| H[🎯 Generate JWT Token]
+    H --> I[💾 Store Auth State]
+    I --> D
     
-    D --> N[🖥️ Main Dashboard]
-    N --> O{⚡ User Action Choice}
+    D --> J[📋 Main Navigation]
+    J --> K{🎯 User Action}
     
-    O -->|➕ Add New Query| P[📝 Add Laptop Query Form]
-    O -->|📋 View Pending| Q[📊 List Pending Queries]
-    O -->|✅ View Resolved| R[📈 Resolved Queries List]  
-    O -->|🚪 Logout| S[🔚 Logout Process]
+    K -->|Add Query| L[📝 Add Laptop Query Form]
+    K -->|View Pending| M[📋 List Pending Queries]
+    K -->|View Resolved| N[✅ Resolved Queries]
+    K -->|Logout| O[🚪 Logout Process]
     
-    P --> T[📋 Fill Query Details:<br/>• Name & Contact<br/>• Laptop & Model<br/>• Issue Description]
-    T --> U[💾 Submit to /api/queries/submit]
-    U --> V[🗄️ Save to MongoDB with 'pending' status]
-    V --> W[🎉 Success Message & Form Reset]
-    W --> N
+    L --> P[📊 Form Validation]
+    P --> Q{✔️ Valid Data?}
+    Q -->|No| R[⚠️ Show Validation Error]
+    R --> L
+    Q -->|Yes| S[📤 Submit to API]
+    S --> T[💾 Save to MongoDB]
+    T --> U[🔄 Update UI]
+    U --> D
     
-    Q --> X[📊 Display All Pending Queries<br/>with Priority & Cost Info]
-    X --> Y{🛠️ Action on Query}
-    Y -->|✅ Mark Resolved| Z[📝 Resolution Dialog:<br/>• Technician Name<br/>• Resolution Details<br/>• Actual Cost in ₹]
-    Y -->|💰 Edit Cost| AA[✏️ Update Cost in ₹]
-    Y -->|🔍 View Details| BB[📖 Show Full Query Info]
+    M --> V[🔍 Fetch Pending Queries]
+    V --> W[📊 Display Query List]
+    W --> X{🛠️ Update Query?}
+    X -->|Yes| Y[✏️ Edit Query Form]
+    X -->|No| D
     
-    Z --> CC[🔗 API: /api/queries/resolve]
-    AA --> DD[💾 Update Database]
-    CC --> EE[✅ Move to Resolved Section]
-    DD --> Q
-    EE --> Q
+    Y --> Z[📝 Update Form]
+    Z --> AA[📤 Submit Update]
+    AA --> BB[💾 Update MongoDB]
+    BB --> CC[🔄 Refresh List]
+    CC --> W
     
-    R --> FF[📈 Show Completed Repairs<br/>with Search & Filter]
-    FF --> GG{🗑️ Delete Query?}
-    GG -->|✅ Yes| HH[⚠️ Confirmation Dialog]
-    GG -->|❌ No| R
-    HH --> II[🔗 API: /api/queries/delete]
-    II --> JJ[🗑️ Remove from Database]
-    JJ --> R
+    N --> DD[🔍 Fetch Resolved Queries]
+    DD --> EE[📊 Display Resolved List]
+    EE --> FF{📈 View Details?}
+    FF -->|Yes| GG[📋 Show Query Details]
+    FF -->|No| D
+    GG --> EE
     
-    S --> KK[🔗 Call /api/auth/logout]
-    KK --> LL[🍪 Clear Auth Cookie]
-    LL --> MM[🧹 Clear LocalStorage]
-    MM --> NN[↩️ Redirect to Login]
-    NN --> C
+    O --> HH[🗑️ Clear Auth Token]
+    HH --> II[💾 Clear User State]
+    II --> JJ[🔄 Redirect to Login]
+    JJ --> C
     
     style A fill:#e1f5fe
-    style D fill:#c8e6c9  
-    style N fill:#fff3e0
-    style P fill:#f3e5f5
-    style Q fill:#e8f5e8
-    style R fill:#fce4ec
-    style S fill:#ffebee
+    style B fill:#fff3e0
+    style C fill:#fce4ec
+    style D fill:#e8f5e8
+    style L fill:#f3e5f5
+    style M fill:#e0f2f1
+    style N fill:#e3f2fd
+    style O fill:#fff8e1
 ```
 
-## 📱 Component Architecture
+### Detailed Workflow Explanation
 
-### 🔐 Authentication Layer
-```
-AuthContext.tsx → ProtectedRoute.tsx → Layout.tsx → Dashboard
-     ↓                    ↓                 ↓           ↓
-JWT Management → Route Guards → User Welcome → Features
-```
+#### 🔐 Authentication Flow
+1. **Application Start**: User visits the application
+2. **Authentication Check**: System verifies if user has valid JWT token
+3. **Login Process**: If not authenticated, redirect to login page
+4. **Credential Validation**: Server validates username/password against MongoDB
+5. **Token Generation**: Create JWT token with user information
+6. **State Management**: Store authentication state in React context
 
-**Components:**
-- **AuthContext.tsx**: Central authentication state management
-- **ProtectedRoute.tsx**: Route-level authentication protection  
-- **login.tsx**: Modern login page with password visibility toggle
-- **Layout.tsx**: Header with user welcome ("Welcome, Nitish Kumar") and logout
+#### 📝 Query Management Flow
+1. **Query Submission**:
+   - User fills out repair request form
+   - Client-side validation checks required fields
+   - Data submitted to `/api/queries` endpoint
+   - Server validates and saves to MongoDB
+   - UI updates with success/error message
 
-### 📝 Query Management Layer
-```
-AddLaptopQuery.tsx → API → MongoDB → ListSection.tsx → ResolvedSection.tsx
-       ↓             ↓       ↓            ↓                    ↓
-   Form Submit → Validate → Save → Display Pending → Show Completed
-```
+2. **Query Listing**:
+   - Fetch queries from database based on status filter
+   - Display in organized list with search/filter capabilities
+   - Real-time updates when queries are modified
 
-**Components:**
-- **AddLaptopQuery.tsx**: New repair query submission form
-- **ListSection.tsx**: Pending queries with resolution actions
-- **ResolvedSection.tsx**: Completed queries with delete functionality
-- **Navigation.tsx**: Tab-based navigation between sections
+3. **Query Updates**:
+   - Admin can update query status, priority, costs
+   - Changes immediately reflected in database
+   - UI updates without page refresh
 
-## 🗃️ Database Architecture
+#### 🔄 Data Flow Architecture
+1. **Frontend → API**: User interactions trigger API calls
+2. **API → Database**: API routes handle business logic and database operations
+3. **Database → API**: MongoDB returns requested data
+4. **API → Frontend**: Formatted response sent to client
+5. **Frontend Update**: React components re-render with new data
 
-### User Collection (MongoDB)
-```typescript
-interface IUser {
-  _id: ObjectId
-  username: string        
-  password: string      
-  name: string         
-  createdAt: Date
-  updatedAt: Date
-}
-```
+#### 🛡️ Security Flow
+1. **Request Intercepting**: All protected routes check for valid JWT
+2. **Token Validation**: Server validates token signature and expiration
+3. **User Context**: Authenticated user data available throughout app
+4. **Auto-logout**: Invalid/expired tokens trigger automatic logout
 
-### LaptopQuery Collection (MongoDB)
-```typescript
-interface ILaptopQuery {
-  _id: ObjectId
-  name: string              // Customer name
-  laptopName: string        // Laptop brand
-  model: string            // Laptop model
-  issue: string            // Issue description
-  status: 'pending' | 'resolved' | 'not_resolved'
-  estimatedCost?: number   // In ₹ (Rupees)
-  actualCost?: number      // In ₹ (Rupees) 
-  resolvedBy?: string      // Technician name
-  resolution?: string      // Resolution details
-  createdAt: Date
-  updatedAt: Date
-}
-```
-
-## 🔗 API Endpoints Overview
-
-### 🔐 Authentication APIs
-| Endpoint | Method | Status | Purpose |
-|----------|---------|---------|---------|
-| `/api/auth/simple-login` | POST | ✅ Working | Primary login endpoint (Currently Used) |
-| `/api/auth/me` | GET | ✅ Working | Get current user information |
-| `/api/auth/logout` | POST | ✅ Working | User logout and session clearing |
-| `/api/auth/complete-reset` | POST | ✅ Working | Initialize all user accounts |
-| `/api/auth/login` | POST | 🚫 Issues | Original login endpoint (Has Problems) |
-
-### 📝 Query Management APIs  
-| Endpoint | Method | Status | Purpose |
-|----------|---------|---------|---------|
-| `/api/queries/submit` | POST | ✅ Working | Submit new repair queries |
-| `/api/queries` | GET | ✅ Working | Get queries with filtering options |
-| `/api/queries/resolve` | POST | ✅ Working | Mark queries as resolved |
-| `/api/queries/delete` | DELETE | ✅ Working | Delete resolved queries |
-
-### 🔧 Debug APIs
-| Endpoint | Method | Status | Purpose |
-|----------|---------|---------|---------|
-| `/api/debug/detailed-users` | GET | ✅ Working | User database inspection |
-
-## 🚀 Technology Stack
-
-- **Frontend Framework:** Next.js 14 with React 18 and TypeScript
-- **Styling:** Tailwind CSS with glassmorphism effects and custom animations  
-- **Database:** MongoDB with Mongoose ODM for data persistence
-- **Authentication:** JWT tokens with HTTP-only cookies and bcrypt hashing
-- **API Layer:** Next.js API Routes with RESTful design
-- **State Management:** React Context API for authentication state
-- **Form Handling:** React state with client-side and server-side validation
-- **Icons & UI:** Custom SVG icons with responsive design principles
-
-## 🚀 Quick Start Guide
+## 🚀 Installation
 
 ### Prerequisites
-- **Node.js 18+** 
-- **MongoDB Database** (Local or Cloud)
-- **npm or yarn** package manager
+- Node.js 18+ installed
+- MongoDB database (local or cloud)
+- Git for version control
 
-### Installation Steps
+### Steps
 
-1. **📥 Clone Repository**
-   ```bash
-   git clone <repository-url>
-   cd laptop-database
-   ```
-
-2. **📦 Install Dependencies**
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
-
-3. **⚙️ Environment Setup**
-   Create `.env.local` file:
-   ```env
-   MONGODB_URI=mongodb://localhost:27017/laptop-repair-management
-   JWT_SECRET=your-super-secret-jwt-key-change-in-production
-   ```
-
-4. **🚀 Start Development Server**
-   ```bash
-   npm run dev
-   ```
-
-5. **👥 Initialize User Accounts**
-   ```bash
-   # Call the API to create user accounts
-   curl -X POST http://localhost:3000/api/auth/complete-reset
-   ```
-
-
-
-## 📊 Data Flow Architecture
-
-### Authentication Flow
-```
-🔐 Login Form → Validation → JWT Generation → HTTP Cookie → Context Update → Dashboard Access
+1. **Clone the repository**:
+```bash
+git clone https://github.com/techbizloanindia/TechFix-Pro---Next-Gen-Laptop-Repair-Management.git
+cd laptop-repair-management
 ```
 
-### Query Management Flow  
-```
-📝 Form Submission → API Validation → MongoDB Storage → Real-time Updates → UI Refresh
-```
-
-### Logout Flow
-```
-🚪 Logout Button → API Call → Cookie Clearing → Storage Cleanup → Login Redirect
+2. **Install dependencies**:
+```bash
+npm install
 ```
 
-## ✨ Feature Highlights
+3. **Environment setup**:
+```bash
+cp .env.example .env.local
+```
 
-### 🔐 Enhanced Authentication
-- **Password Visibility Toggle:** Eye icon to show/hide passwords during login
-- **User Welcome Display:** "Welcome, Nitish Kumar" with username display
-- **Secure Logout:** Proper session cleanup with visual feedback
-- **Route Protection:** Automatic redirect for unauthorized access attempts
+4. **Configure environment variables** (see [Environment Variables](#-environment-variables))
 
-### 🎨 Modern Design Elements
-- **Glassmorphism UI:** Beautiful glass-effect cards with backdrop blur
-- **Responsive Layout:** Works perfectly on desktop, tablet, and mobile
-- **Smooth Animations:** Fade-in effects, hover transitions, and loading states  
-- **Professional Color Scheme:** Blue/teal gradient theme throughout
-- **Interactive Elements:** Modal dialogs, confirmation alerts, and status badges
+5. **Initialize database**:
+```bash
+npm run init-db
+```
 
-### 💰 Cost Management (₹ Rupees)
-- **Indian Currency Support:** All costs displayed in ₹ (Indian Rupees)
-- **Estimated vs Actual Cost Tracking:** Compare initial estimates with final costs
-- **Cost History:** Track cost changes and technician estimates
+6. **Start development server**:
+```bash
+npm run dev
+```
 
-## 🔒 Security Features
+7. **Open application**:
+Visit `http://localhost:3000`
 
-- **🔐 JWT Authentication:** Secure token-based authentication system
-- **🔒 bcrypt Password Hashing:** Industry-standard password protection (12 rounds)
-- **🍪 HTTP-Only Cookies:** Secure session management preventing XSS attacks
-- **🛡️ Route Protection:** Client and server-side route guards
-- **✅ Input Validation:** Comprehensive client and server-side validation
-- **🚫 MongoDB Injection Protection:** Built-in Mongoose security features
+## 📖 Usage
 
-## 📈 Performance Optimizations
+### Default Login Credentials
+- **Username**: `admin`
+- **Password**: `admin123`
 
-- **⚡ Next.js Optimization:** Automatic static generation and code splitting
-- **🗄️ Efficient Database Queries:** Optimized MongoDB queries with proper indexing
-- **🔄 React Context Optimization:** Efficient state management with minimal re-renders
-- **📱 Responsive Images:** Optimized image loading and responsive design
-- **💾 Smart Caching:** Intelligent caching strategies for better performance
+### Creating New Repair Requests
+1. Navigate to "Add Query" tab
+2. Fill out the repair request form:
+   - Customer name
+   - Laptop brand/model
+   - Issue description
+   - Contact information (optional)
+3. Submit the form
+4. Query will appear in "Pending" section
 
-## 🚀 Production Deployment
+### Managing Queries
+1. View pending queries in "List" tab
+2. Update status, priority, or costs as needed
+3. Mark queries as resolved with resolution details
+4. View completed repairs in "Resolved" tab
 
-### Build Commands
+### Admin Functions
+- User management through API endpoints
+- Database maintenance scripts
+- System status monitoring
+
+## 🔧 Environment Variables
+
+Create a `.env.local` file in the root directory:
+
+```env
+# Database Configuration
+MONGODB_URI=mongodb://localhost:27017/laptop-repair-db
+# or for MongoDB Atlas:
+# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/laptop-repair-db
+
+# Authentication
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+JWT_EXPIRES_IN=7d
+
+# Application
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NODE_ENV=development
+
+# Optional: For production deployment
+NEXTAUTH_URL=https://your-domain.com
+NEXTAUTH_SECRET=your-nextauth-secret
+```
+
+### Environment Variable Descriptions
+- `MONGODB_URI`: MongoDB connection string
+- `JWT_SECRET`: Secret key for JWT token signing
+- `JWT_EXPIRES_IN`: JWT token expiration time
+- `NEXT_PUBLIC_APP_URL`: Application URL for client-side requests
+- `NODE_ENV`: Environment mode (development/production)
+
+## 📜 Scripts
+
+Available npm scripts:
+
 ```bash
 # Development
-npm run dev
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run start        # Start production server
+npm run lint         # Run ESLint
 
-# Production Build
-npm run build
-npm start
+# Database Management
+npm run init-db      # Initialize database with default users
+npm run reset-db     # Reset database (caution: deletes all data)
+npm run check-db     # Check database connection
 
-# Type Checking
-npm run type-check
-
-# Linting
-npm run lint
+# Testing
+npm run test-auth    # Test authentication endpoints
+npm run test-db      # Test database connection
 ```
 
-### Environment Variables (Production)
-```env
-MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/laptop-repair-prod
-JWT_SECRET=your-super-secure-production-jwt-secret-256-bit-minimum
-NODE_ENV=production
-```
+## 🤝 Contributing
 
-## 🎯 Future Enhancements
+### Development Workflow
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes with proper TypeScript types
+4. Test your changes thoroughly
+5. Commit with descriptive messages: `git commit -m 'Add amazing feature'`
+6. Push to your branch: `git push origin feature/amazing-feature`
+7. Create a Pull Request
 
-### 🔮 Roadmap Features
-- [ ] **📧 Email Notifications:** Automatic email updates for query status changes
-- [ ] **📱 Mobile App:** React Native mobile application
-- [ ] **📊 Advanced Analytics:** Repair statistics and performance metrics
-- [ ] **🔍 Advanced Search:** Full-text search with filters and sorting
-- [ ] **📎 File Uploads:** Image attachments for repair documentation
-- [ ] **💳 Payment Integration:** Online payment processing
-- [ ] **🌐 Multi-language Support:** Internationalization (i18n)
-- [ ] **📈 Reporting Dashboard:** Advanced reporting and analytics
+### Code Standards
+- Use TypeScript for all new code
+- Follow ESLint configuration
+- Write meaningful component and function names
+- Add proper error handling
+- Include JSDoc comments for complex functions
+- Ensure responsive design with Tailwind CSS
 
-## 🤝 Contributing Guidelines
+### Testing Guidelines
+- Test all API endpoints with various input scenarios
+- Verify authentication flows work correctly
+- Check responsive design on multiple screen sizes
+- Validate form inputs and error handling
 
-1. **🍴 Fork Repository:** Create your own fork
-2. **🌿 Create Branch:** `git checkout -b feature/amazing-feature`
-3. **✅ Make Changes:** Implement your feature with tests
-4. **🧪 Test Thoroughly:** Ensure all tests pass
-5. **📝 Commit Changes:** `git commit -m 'Add amazing feature'`
-6. **🚀 Push Branch:** `git push origin feature/amazing-feature`
-7. **🔄 Create PR:** Submit a pull request for review
+## 📝 License
 
-## 👨‍💻 Project Creator
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-**Created by: Nitish Singh**
-- 🏆 **Full-Stack Developer** specializing in React, Next.js, and MongoDB
-- 🎯 **Project Vision:** Revolutionizing laptop repair management with modern web technology
-- 🚀 **Tech Expertise:** Authentication systems, database design, and responsive UI/UX
+## 🙏 Acknowledgments
 
-## 📞 Support & Contact
+- Next.js team for the amazing framework
+- MongoDB team for the robust database solution
+- Tailwind CSS for the utility-first CSS framework
+- React team for the powerful frontend library
+- All contributors who help improve this project
 
-- **🐛 Bug Reports:** Create an issue in the repository
-- **💡 Feature Requests:** Submit enhancement proposals  
-- **❓ Questions:** Contact the development team
-- **👨‍💻 Creator:** Nitish Singh
 
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🎉 **TechFix Pro - Complete & Working!**
+**Built with ❤️ by TechFix-Pro Team**
 
-**✅ All Systems Operational:**
-- 🔐 Authentication System ✅
-- 📝 Query Management ✅  
-- 💰 Cost Tracking (₹) ✅
-- 🎨 Modern UI/UX ✅
-- 🗑️ Data Management ✅
-- 👥 Multi-user Support ✅
-- 📱 Mobile Responsive ✅
-
-**Ready for production use with comprehensive laptop repair management capabilities!**
+*Transform your laptop repair business with professional management tools.*
